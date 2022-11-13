@@ -1,0 +1,45 @@
+version: '3'
+
+networks:
+  external_network:
+  internal_network:
+    internal: true
+
+services:
+  # List of Mastodon services go here, based on the official docker-compose file:
+  # https://github.com/mastodon/mastodon/blob/290d78cea4850982a2843dc1a2954f0d66fe58d8/docker-compose.yml
+  
+  prometheus:
+    image: prom/prometheus:v2.40.1
+    container_name: mastodon-prometheus
+    user: 1000:1000
+    volumes:
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./prometheus/data:/prometheus
+    networks:
+      - internal_network
+    depends_on:
+      - cadvisor
+      - statsd-exporter
+  
+  statsd-exporter:
+    image: prom/statsd-exporter:v0.22.8
+    container_name: mastodon-statsd-exporter
+    volumes:
+      - ./statsd-exporter/statsd_mapping.yml:/tmp/statsd_mapping.yml
+    command: --statsd.mapping-config=/tmp/statsd_mapping.yml
+    networks:
+      - internal_network
+  
+  cadvisor:
+    image: gcr.io/cadvisor/cadvisor:v0.46.0
+    container_name: cadvisor
+    privileged: true
+    networks:
+      - internal_network
+    volumes:
+    - /:/rootfs:ro
+    - /var/run:/var/run:ro
+    - /sys:/sys:ro
+    - /var/lib/docker/:/var/lib/docker:ro
+    - /dev/disk/:/dev/disk:ro

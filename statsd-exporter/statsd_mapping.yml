@@ -1,0 +1,39 @@
+mappings:
+# Mastodon StatsD mappings
+# Based on https://github.com/localshred/nsa#built-in-collectors
+
+# Sidekiq
+# Queue gauges
+- match: "Mastodon.*.sidekiq.queues.*.*"
+  name: "mastodon_sidekiq_queues_${3}"
+  labels:
+    environment: "$1"
+    queue: "$2"
+
+# Generic gauges
+- match: "Mastodon.*.sidekiq.*"
+  name: "mastodon_sidekiq_${2}"
+  labels:
+    environment: "$1"
+
+# Worker counters and timer
+- match: "Mastodon\\.(\\w+)\\.sidekiq\\.(.*)\\.(success|failure|processing_time)"
+  match_type: regex
+  name: "mastodon_sidekiq_workers_${3}"
+  labels:
+    environment: "$1"
+    worker: "$2"
+
+# Cache
+- match: "Mastodon.*.cache.*.duration"
+  name: "mastodon_cache_${2}"
+  labels:
+    environment: "$1"
+
+# DB
+- match: "Mastodon.*.db.tables.*.queries.*.duration"
+  name: "mastodon_db_query"
+  labels:
+    environment: "$1"
+    table: "$2"
+    type: "$3"
