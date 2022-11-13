@@ -37,3 +37,20 @@ mappings:
     environment: "$1"
     table: "$2"
     type: "$3"
+
+# Web
+- match: "Mastodon.*.web.*.*.*.status.*"
+  name: "mastodon_web_request_status"
+  labels:
+    environment: "$1"
+    controller: "$2"
+    action: "$3"
+    format: "$4"
+    status_code: "$5"
+- match: "Mastodon.*.web.*.*.*.*"
+  name: "mastodon_web_request_${5}"
+  labels:
+    environment: "$1"
+    controller: "$2"
+    action: "$3"
+    format: "$4"
