@@ -1,6 +1,6 @@
 # Mastodon monitoring and metrics setup
 
-My Docker-based setup for monitoring a Mastodon instance with Prometheus
+My Docker-based setup for monitoring a Mastodon instance with Prometheus and Grafana
 
 ## Overview
 
@@ -16,3 +16,6 @@ The setup consists of the following services:
 
 Mastodon collects the StatsD metrics listed [here](https://github.com/localshred/nsa#built-in-collectors). See `statsd-exporter/statsd_mapping.yml` for the rules that transforms these metrics.
 
+### Grafana dashboard
+
+The dashboard I created based on the data is available at `grafana/dashboard.json` if you want to import it.
